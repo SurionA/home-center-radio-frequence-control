@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>RF and Socket.io</title>
+  </head>
+
+  <body>
+    <h1>Exemple with socket.io.</h1>
+    <p><input type="text" id="ipserver" placeholder="Enter your server IP"/></p>
+    <p><input type="button" value="Light On" id="LightOn" /></p>
+    <p><input type="button" value="Light Off" id="LightOff" /></p>
+
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/q.js/0.9.2/q.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+    <script>
+    var socket;
+
+    function getServerIp() {
+      var ip = $('#ipserver').val();
+      var rx = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/;
+
+      if(!rx.test(ip) && ip !== 'localhost') { return false; };
+
+      return ip;
+    }
+
+    function getSocket() {
+      return Q.promise(function (resolve, reject) {
+        if(socket && socket.connected) {
+          return resolve(socket);
+        }
+
+        var ip = getServerIp();
+
+        if(!ip) {
+          return reject('Please enter an IP');
+        }
+
+        socket = io.connect('http://' + ip + ':3000');
+        socket.on('connect', function() {
+          if(socket && socket.connected) {
+            return resolve(socket);
+          }
+
+          socket.disconnect();
+          reject('Unable to connect to ' + ip + ', please try another.');
+        });
+
+        socket.on('connect_error', function(err) {
+          socket.disconnect();
+
+          return reject('Connection fail to ' + ip + ', please try another.');
+        });
+
+        socket.on('error', function(err) {
+          socket.disconnect();
+          console.log('socket error', err);
+
+          return reject('Unable to connect to ' + ip + ', please try another.');
+        });
+      });
+    }
+
+    $('#LightOn').click(function() {
+      getSocket()
+        .then(function(socket){
+          socket.emit('livingroom:light:on', 'Yolo');
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+    });
+
+    $('#LightOff').click(function() {
+      getSocket()
+        .then(function(socket){
+          socket.emit('livingroom:light:off', 'Yolo');
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+    });
+</script>
+  </body>
+</html>
