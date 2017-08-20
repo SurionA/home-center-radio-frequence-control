@@ -9,6 +9,6 @@ const server = http.createServer((req, res) => {
 const io = require('socket.io').listen(server);
 
 server.listen(3000);
-const radioFrequenceControl = require('../index');
+const radioFrequenceControl = require('../../index');
 
 radioFrequenceControl.initSocket(io);
