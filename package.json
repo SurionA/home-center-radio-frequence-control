@@ -1,11 +1,27 @@
 {
   "name": "home-center-radio-frequence-control",
   "version": "1.0.0",
-  "description": "",
+  "description": "WebSocket handler to manage Radio Frequence",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "frere.maxime@gmail.com",
-  "license": "MIT"
+  "author": "SurionA <frere.maxime@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SurionA/home-center-radio-frequence-control.git"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": "8.4.0",
+    "npm": "5.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.5.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.2.1",
+    "socket.io": "^2.0.3"
+  }
 }
